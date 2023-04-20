@@ -122,7 +122,8 @@ while running:
     else:
 
         # TODO: Add the bot that you play against locally
-        allPlayers.update(keys, screen)
+        player1.update(keys, screen)
+        player2.play_bot(player1.rect.x, screen)
 
 
     # Updating the players and screen and stuff
@@ -140,6 +141,8 @@ while running:
     screen.blit(menuHelp, menuHelpPos)
     objects.draw(screen)
     allPlayers.draw(screen)
+    player1.outgoingAttacks.draw(screen)
+    player2.outgoingAttacks.draw(screen)
 
     # Checking if player 2 was hit 
     if pygame.sprite.spritecollide(player1, player2.outgoingAttacks, False):

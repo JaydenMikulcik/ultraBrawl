@@ -224,3 +224,46 @@ class Player(pygame.sprite.Sprite):
             self.rect.y -= 1 
             self.rect.y -= self.jump_speed
             self.on_ground = False
+
+
+    def play_bot(self, player1x, screen):
+
+        self.check_game_status()
+
+        random_decision = random.randint(1, 100)
+
+        if self.rect.x < 660:
+            self.rect.x += self.speed
+        elif self.rect.x < 640:
+            self.rect.x -= self.speed
+
+        # Apply gravity
+        if not self.on_ground:
+            self.rect.y += self.gravity
+
+        # Check for collisions with platforms
+        collided_platforms = pygame.sprite.spritecollide(self, self.platforms, False)
+        if collided_platforms:
+            self.on_ground = True
+            self.rect.bottom = min(platform.rect.top for platform in collided_platforms)
+        else:
+            self.on_ground = False
+
+        # Handle jumping
+        if random_decision == 1 and self.on_ground:
+            # Move the player up slightly to avoid collision detection with the platform
+            self.rect.y -= 1 
+            self.rect.y -= self.jump_speed
+            self.on_ground = False
+
+        if random_decision == 2:
+            if self.rect.x > player1x:
+                direction = "left"
+            else:
+                direction = "right"
+            newAttack = Weapon(self.rect.x, self.rect.y, direction)
+            self.outgoingAttacks.add(newAttack)
+        
+        self.execute_attack(screen)
+
+        

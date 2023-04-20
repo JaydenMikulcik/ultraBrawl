@@ -232,9 +232,9 @@ class Player(pygame.sprite.Sprite):
 
         random_decision = random.randint(1, 100)
 
-        if self.rect.x < 660:
+        if self.rect.x < 690 and self.rect.x > 720:
             self.rect.x += self.speed
-        elif self.rect.x < 640:
+        elif self.rect.x > 630:
             self.rect.x -= self.speed
 
         # Apply gravity

@@ -55,8 +55,8 @@ def options(screen):
                     gameStatus = onlineClient.join_game(input_text.encode())
                     print(gameStatus)
                     if gameStatus:
-                        # return
-                        continue
+                        return
+                    
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.KEYDOWN:
@@ -75,7 +75,7 @@ def options(screen):
                             gameStatus = onlineClient.join_game(input_text.encode())
                             trying_to_join = True
                             if gameStatus:
-                                continue
+                                return
                 elif event.type == pygame.TEXTINPUT:
                     input_text += event.text
 

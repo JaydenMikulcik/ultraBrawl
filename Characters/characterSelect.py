@@ -71,6 +71,6 @@ def characterSelectScreen(screen):
             pygame.draw.rect(screen, (0, 0, 0), box)
 
         if playerSelected:
-            game_type = options(screen)
-            return game_type
+            game_type, client = options(screen)
+            return game_type, client
 

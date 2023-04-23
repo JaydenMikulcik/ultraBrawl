@@ -57,12 +57,12 @@ def mainMenu(screen):
                     if selected_option == 0:
                         # Start the game
                         menu_loop = False
-                        return "solo", None
+                        return "solo", None, None
                     elif selected_option == 1:
                         # Open the options screen
-                        serverType = characterSelectScreen(screen)
-                        return "multiplayer", serverType
+                        serverType, client = characterSelectScreen(screen)
+                        return "multiplayer", serverType, client
                     elif selected_option == 2:
                         # Quit the game
                         menu_loop = False
-                        return "leaderboard", None
+                        return "leaderboard", None, None

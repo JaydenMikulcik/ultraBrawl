@@ -77,7 +77,7 @@ while running:
     
     # Toggle Showing the Menu
     if showMenu:
-        menuChoice, serverType = mainMenu(screen)
+        menuChoice, serverType, onlineClient = mainMenu(screen)
         showMenu = False
         if menuChoice == "solo":
              # TODO make player 2 the bot that will be programmed
@@ -89,11 +89,11 @@ while running:
              # my_shared_variable = multiprocessing.Value(player1.rect.x)
              if serverType == "create":
                     # The Connected player 2
-                    onlinePlayer2 = Client()
+                    onlinePlayer2 = onlineClient
                     continue
              else:
                     # The connected player 1
-                    onlinePlayer1 = Client()
+                    onlinePlayer1 = onlineClient
                     continue
         else:
              # TODO make this open the leaderboard

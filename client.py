@@ -14,8 +14,9 @@ class Client:
     def __init__(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # For OHIO server
-        # self.client_socket.connect(('3.17.4.161', 5000))
-        self.client_socket.connect(('localhost', 8000))
+        self.client_socket.connect(('3.17.4.161', 5000))
+        self.client_socket.settimeout(0.2)
+        # self.client_socket.connect(('localhost', 8000))
         #threading.Thread(target=self.receive_data).start()
         #self.send_data()
 
@@ -56,14 +57,15 @@ class Client:
             if notCreated:
                 self.client_socket.sendall(gameId)
                 notCreated = False
-            bothPlayers = self.client_socket.recv(1024)
-            if bothPlayers:
-                return True
-            return False
+            try:
+                bothPlayers = self.client_socket.recv(1024)
+                if bothPlayers:
+                    return True
+                return False
+            except socket.timeout:
+                return False
         except Exception as e:
-            print(f'Error sending data: {e}')
-            self.client_socket.close()
-            return
+            return False
 
     def receive_data(self):
         """
@@ -71,20 +73,18 @@ class Client:
         other connected computer
         """
         try:
-            data = self.client_socket.recv(1024)
+            data = self.client_socket.recv(2000)
             if data:
                 # Recieve the Character Object
                 my_custom_obj = pickle.loads(data)
-                print('Player Object recieved')
+                print('Keys Recieved')
                 return my_custom_obj
                 
             else:
-                print('Disconnected from server.')
-                self.client_socket.close()
+                print('No Keys Recieved')
                 return None
         except Exception as e:
             print(f'Error receiving data: {e}')
-            self.client_socket.close()
             return None
 
     def send_data(self, playerObj):
@@ -100,8 +100,6 @@ class Client:
             self.client_socket.sendall(data)
         except Exception as e:
             print(f'Error sending data: {e}')
-            self.client_socket.close()
-            return
 
 
 class ClientWhile:

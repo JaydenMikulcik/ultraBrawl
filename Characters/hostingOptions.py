@@ -26,11 +26,15 @@ def options(screen):
         text_rect = text.get_rect(center=(700, 500))  # Center the text in the window
         screen.blit(text, text_rect)
         while True:
+            for _ in pygame.event.get():
+                # I think need to render game again idk
+                continue
             print("Second Player Not in Yet")
             gameStatus = onlineClient.join_game(random_ints_string.encode())
-            print(gameStatus)
+
             if gameStatus == True:
                 return
+            pygame.display.update()
 
     def enter_host_code(screen):
         # Set up the text input field
@@ -42,8 +46,17 @@ def options(screen):
 
         # Main game loop
         running = True
+        trying_to_join = False
         while running:
             for event in pygame.event.get():
+
+                # Try to join the game looking for join code
+                if trying_to_join:
+                    gameStatus = onlineClient.join_game(input_text.encode())
+                    print(gameStatus)
+                    if gameStatus:
+                        # return
+                        continue
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.KEYDOWN:
@@ -59,10 +72,10 @@ def options(screen):
                     if submit_button.collidepoint(event.pos):  # Submit the form when the user clicks the button
                         print("Form submitted with input:", input_text)
                         while True:
-                            print("Host Does Not Exist... ")
                             gameStatus = onlineClient.join_game(input_text.encode())
-                            if gameStatus == True:
-                                return
+                            trying_to_join = True
+                            if gameStatus:
+                                continue
                 elif event.type == pygame.TEXTINPUT:
                     input_text += event.text
 
@@ -109,12 +122,11 @@ def options(screen):
                 if button1_rect.collidepoint(event.pos):
                     print("Creating a server... ")
                     get_host_code(screen)
-                    # TODO: Only jump when the server has 2 members
-                    # return "create"
+                    return "create", onlineClient
                 elif button2_rect.collidepoint(event.pos):
                     print("Joining a server... ")
                     enter_host_code(screen)
-                    return "join"
+                    return "join", onlineClient
 
         pygame.draw.rect(screen, button_color, button1_rect)
         pygame.draw.rect(screen, button_color, button2_rect)

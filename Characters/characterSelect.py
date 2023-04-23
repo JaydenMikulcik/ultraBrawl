@@ -2,7 +2,7 @@ import pygame
 
 from Characters.hostingOptions import options
 
-def characterSelectScreen(screen):
+def characterSelectScreen(screen, singlePlayer=False):
     
     # Initialize the chosen character as NULL
     chosen_character = None
@@ -71,6 +71,9 @@ def characterSelectScreen(screen):
             pygame.draw.rect(screen, (0, 0, 0), box)
 
         if playerSelected:
-            game_type, client = options(screen)
-            return game_type, client
+            if not singlePlayer:
+                game_type, client = options(screen)
+                return game_type, client
+            else:
+                return chosen_character
 

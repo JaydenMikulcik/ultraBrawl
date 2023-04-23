@@ -7,8 +7,6 @@ from OtherObjects.platforms import Platform
 
 from Characters.playerDefault import Player
 from Characters.blazeFist import blazeFist
-from client import Client
-import threading
 
 
 
@@ -77,16 +75,15 @@ while running:
     
     # Toggle Showing the Menu
     if showMenu:
-        menuChoice, serverType, onlineClient = mainMenu(screen)
+        menuChoice, serverType, onlineClient, character = mainMenu(screen)
         showMenu = False
         if menuChoice == "solo":
-             # TODO make player 2 the bot that will be programmed
+            # Goes through here if playing against the bot online
             onlinePlayer1 = None
             onlinePlayer2 = None
             continue
         elif menuChoice == "multiplayer":
-             # TODO make this pass in the custom object Player
-             # my_shared_variable = multiprocessing.Value(player1.rect.x)
+             # Goes here if the person playing choses to play online
              if serverType == "create":
                     # The Connected player 2
                     onlinePlayer2 = onlineClient

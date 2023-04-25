@@ -58,8 +58,8 @@ class Client:
                 self.client_socket.sendall(gameId)
                 notCreated = False
             try:
-                bothPlayers = self.client_socket.recv(1024)
-                if bothPlayers:
+                bothPlayers = self.client_socket.recv(1024).decode()
+                if bothPlayers != "not":
                     return True
                 return False
             except socket.timeout:

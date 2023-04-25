@@ -54,13 +54,41 @@ def characterSelectScreen(screen, singlePlayer=False):
                 # Check if a box was clicked
                 for i, box in enumerate(boxes):
                     if box.collidepoint(event.pos):
+
                         if i == 0:
                             print("Default Character Chosen")
                             chosen_character = "default"
+
                         if i == 1:
                             print("Blaze Fist Chosen")
                             chosen_character = "blazeFist"
-                        print("Box clicked:", box)
+                       
+
+                        if i == 2:
+                            print("Blood Moon Chosen")
+                            chosen_character = "bloodMoon"
+    
+
+                        if i == 3:
+                            print("Death Bringer Chosen")
+                            chosen_character = "deathBringer"
+                  
+
+                        if i == 4:
+                            print("Quantum Knight Chosen")
+                            chosen_character = "quantumKnight"
+        
+
+                        if i == 5:
+                            print("TODO ADD Charachert")
+                            chosen_character = "default"
+                    
+
+                        if i == 6:
+                            print("TODO ADD Charachert")
+                            chosen_character = "default"
+                    
+                    
                         playerSelected = True
 
         # Clear the screen

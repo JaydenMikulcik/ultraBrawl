@@ -3,6 +3,7 @@ import pygame
 
 from mainMenu import mainMenu
 from OtherObjects.platforms import Platform
+from instantiatePlayer import createPlayer
 
 
 from Characters.playerDefault import Player
@@ -81,6 +82,8 @@ while running:
             # Goes through here if playing against the bot online
             onlinePlayer1 = None
             onlinePlayer2 = None
+            player1 = createPlayer(character, screen.get_width() / 2 - 378, screen.get_height() / 2, objects)
+            allPlayers.add(player1)
             continue
         elif menuChoice == "multiplayer":
              # Goes here if the person playing choses to play online

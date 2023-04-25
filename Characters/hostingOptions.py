@@ -22,19 +22,21 @@ def options(screen):
     font = pygame.font.Font(None, 36)
 
     def get_host_code(screen):
-        text = font.render("Enter Game Code: " + random_ints_string, True, (255, 0, 0))  # Render white text on a transparent background
+        running = True
+        text = font.render("Enter Game Code: " + random_ints_string, True, (255, 0, 0))
         text_rect = text.get_rect(center=(700, 500))  # Center the text in the window
         screen.blit(text, text_rect)
-        while True:
-            for _ in pygame.event.get():
+        while running:
+            for event in pygame.event.get():
                 # I think need to render game again idk
-                continue
-            print("Second Player Not in Yet")
+                if event.type == pygame.QUIT:
+                    running = False
             gameStatus = onlineClient.join_game(random_ints_string.encode())
 
-            if gameStatus == True:
+            if gameStatus:
                 return
             pygame.display.update()
+
 
     def enter_host_code(screen):
         # Set up the text input field

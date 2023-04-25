@@ -72,17 +72,23 @@ class Player(pygame.sprite.Sprite):
         self.health = 0
 
         # Setup for the player
-        self.image = pygame.Surface((32, 64))
+        self.image = pygame.Surface((30, 90))
         self.image.fill((255, 0, 0))  # Red color
         self.rect = self.image.get_rect()
-        # self.img_bytes = pygame.image.tostring(image, 'RGB')
+        self.imageLib = [r"images\characters\bloodMoon\sideView.PNG", r"images\characters\bloodMoon\frontView.PNG", r"images\characters\bloodMoon\sideView.PNG"]
         self.rect.x = x
         self.rect.y = y
-        self.speed = 5
+        self.speed = 8
         self.jump_speed = 80
+        self.doublejump = True
         self.gravity = 3
         self.on_ground = False
         self.platforms = platforms_group
+        
+        # Prevent from clicking button and multiple happen at same time
+        self.delay = 80
+        self.current_time = pygame.time.get_ticks()
+        self.next_action_time = self.current_time + self.delay
         
         # Setup for attacks
         self.outgoingAttacks = pygame.sprite.Group()
@@ -189,15 +195,21 @@ class Player(pygame.sprite.Sprite):
         Param screen: the scree from the main logic
         """
 
+        # Make the image based on the way the player walks
+        image = pygame.image.load(self.imageLib[1]).convert_alpha()
+
         # Checking for the game status to see if over
         self.check_game_status()
+        self.current_time = pygame.time.get_ticks()
 
 
         # Logic to control the characters
         if keys[pygame.K_LEFT]:
             self.rect.x -= self.speed
+            image = pygame.image.load(self.imageLib[0]).convert_alpha()
         if keys[pygame.K_RIGHT]:
             self.rect.x += self.speed
+            image = pygame.image.load(self.imageLib[2]).convert_alpha()
 
         if keys[pygame.K_e]:
             if pygame.time.get_ticks() - self.last_attack_press > 200:
@@ -214,17 +226,25 @@ class Player(pygame.sprite.Sprite):
         collided_platforms = pygame.sprite.spritecollide(self, self.platforms, False)
         if collided_platforms:
             self.on_ground = True
+            self.doublejump = True
             self.rect.bottom = min(platform.rect.top for platform in collided_platforms)
         else:
             self.on_ground = False
 
         # Handle jumping
-        if keys[pygame.K_SPACE] and self.on_ground:
-            # Move the player up slightly to avoid collision detection with the platform
-            self.rect.y -= 1 
-            self.rect.y -= self.jump_speed
-            self.on_ground = False
+        if self.current_time >= self.next_action_time:
+            if keys[pygame.K_SPACE] and self.on_ground or keys[pygame.K_SPACE] and self.doublejump:
+                # Move the player up slightly to avoid collision detection with the platform
+                self.rect.y -= 1 
+                self.rect.y -= self.jump_speed
+                if self.on_ground:
+                    self.on_ground = False
+                else:
+                    self.doublejump = False
+            self.next_action_time = self.current_time + self.delay
 
+
+        self.image = pygame.transform.scale(image, (int(image.get_width() * 0.5), int(image.get_height() * 0.5)))
 
     def play_bot(self, player1x, screen):
 

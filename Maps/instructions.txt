@@ -1,0 +1,9 @@
+TODO make a couple maps in here
+
+
+Then Randomlly decide which map to use 
+
+
+Use the platform object in OtherObjects.platforms
+
+and use good terain tbh

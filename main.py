@@ -17,7 +17,7 @@ pygame.init()
 
 # Creating the background image and initializing the game
 screen = pygame.display.set_mode((1280, 720))
-background_image = pygame.image.load('backDrop.png').convert()
+background_image = pygame.image.load(r'images/backDrop.png').convert()
 clock = pygame.time.Clock()
 running = True
 dt = 0

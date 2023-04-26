@@ -15,8 +15,8 @@ def options(screen):
     random_ints_string = "".join(str(i) for i in random_ints)
 
     # set up the screen
-    screen_width = 700
-    screen_height = 900
+    screen_width = 1280
+    screen_height = 720
 
     # set up the fonts
     font = pygame.font.Font(None, 36)
@@ -100,12 +100,12 @@ def options(screen):
 
 
     # set up the buttons
-    button_width = 100
+    button_width = 200
     button_height = 50
-    button_padding = 20
+    button_padding = 100
     button_x1 = (screen_width - button_width * 2 - button_padding) / 2
     button_x2 = button_x1 + button_width + button_padding
-    button_y = (screen_height - button_height) / 2
+    button_y = 600
     button1_rect = pygame.Rect(button_x1, button_y, button_width, button_height)
     button2_rect = pygame.Rect(button_x2, button_y, button_width, button_height)
 
@@ -134,6 +134,6 @@ def options(screen):
         pygame.draw.rect(screen, button_color, button2_rect)
         button1_text = font.render("Host Game", True, text_color)
         button2_text = font.render("Create Game", True, text_color)
-        screen.blit(button1_text, (button_x1 + button_width/2 - button1_text.get_width()/2, button_y + button_height/2 - button1_text.get_height()/2))
-        screen.blit(button2_text, (button_x2 + button_width/2 - button2_text.get_width()/2, button_y + button_height/2 - button2_text.get_height()/2))
+        screen.blit(button1_text, (button_x1 + button_width/2 - button1_text.get_width()/2, 600))
+        screen.blit(button2_text, (button_x2 + button_width/2 - button2_text.get_width()/2, 600))
         pygame.display.update()

@@ -4,13 +4,17 @@ from Characters.hostingOptions import options
 
 def characterSelectScreen(screen, singlePlayer=False):
     
-    # Initialize the chosen character as NULL
+    # Initialize the chosen charachter and screen size
+    playerSelected = False
+    screen_width = 1280
+    screen_height = 600
     chosen_character = None
 
-    # Set the screen dimensions
-    playerSelected = False
-    screen_width = 400
-    screen_height = 400
+    # Set up the font
+    font = pygame.font.Font(None, 50)
+    selecText = font.render("Select Your Character", True, (255, 0, 0))
+    selectRect = selecText.get_rect()
+    selectRect.center = (screen_width // 2, 100)
 
 
     # Set the box dimensions
@@ -98,6 +102,7 @@ def characterSelectScreen(screen, singlePlayer=False):
 
         # Clear the screen
         screen.fill((255, 255, 255))
+        screen.blit(selecText, selectRect)
 
         # Draw the boxes
         for i, box in enumerate(boxes):

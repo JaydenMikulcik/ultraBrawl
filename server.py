@@ -1,6 +1,10 @@
 import socket
 import threading
 
+
+# The Code for the server that is used to connect the clients
+# (COPY of this code is deployed on EC2 instance at ip 3.17.4.161)
+# This Class just used for testing purposes
 class Server:
     def __init__(self):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

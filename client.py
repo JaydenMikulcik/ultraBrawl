@@ -1,15 +1,16 @@
 import socket
-import threading
 import pickle
 
-from Characters.playerDefault import Player
 
+# Object Used to test serialization with pickle
 class MyCustomObject:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
 
+
+# Client Used in the game to communicate with the server
 class Client:
     def __init__(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -102,6 +103,8 @@ class Client:
             print(f'Error sending data: {e}')
 
 
+
+# Client with While loop in sending and recieving data
 class ClientWhile:
     def __init__(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

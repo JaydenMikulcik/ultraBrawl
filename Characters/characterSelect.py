@@ -34,6 +34,11 @@ def characterSelectScreen(screen, singlePlayer=False):
     # Create a list to hold the boxes
     boxes = []
 
+    # The face of each character that will go in the boxes
+    boxesFaces = [r"images\characters\blazefist\face.PNG", r"images\characters\bloodMoon\face.PNG", r"images\characters\deathBringer\face.PNG",
+                  r"images\characters\quantumKnight\face.PNG", None, None,
+                  None, None, None]
+
     # Create the boxes
     for row in range(num_rows):
         for col in range(num_cols):
@@ -57,26 +62,26 @@ def characterSelectScreen(screen, singlePlayer=False):
 
                         if i == 0:
                             print("Default Character Chosen")
-                            chosen_character = "default"
+                            chosen_character = "blazeFist"
 
                         if i == 1:
                             print("Blaze Fist Chosen")
-                            chosen_character = "blazeFist"
+                            chosen_character = "bloodMoon"
                        
 
                         if i == 2:
                             print("Blood Moon Chosen")
-                            chosen_character = "bloodMoon"
+                            chosen_character = "deathBringer"
     
 
                         if i == 3:
                             print("Death Bringer Chosen")
-                            chosen_character = "deathBringer"
+                            chosen_character = "quantumKnight"
                   
 
                         if i == 4:
                             print("Quantum Knight Chosen")
-                            chosen_character = "quantumKnight"
+                            chosen_character = "default"
         
 
                         if i == 5:
@@ -95,8 +100,13 @@ def characterSelectScreen(screen, singlePlayer=False):
         screen.fill((255, 255, 255))
 
         # Draw the boxes
-        for box in boxes:
-            pygame.draw.rect(screen, (0, 0, 0), box)
+        for i, box in enumerate(boxes):
+            pygame.draw.rect(screen, (0,0,0), box)
+
+            # If the charachter exists then draw face
+            if boxesFaces[i]:
+                image = pygame.image.load(boxesFaces[i]).convert_alpha()
+                screen.blit(image, box)
 
         if playerSelected:
             if not singlePlayer:

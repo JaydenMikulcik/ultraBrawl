@@ -11,6 +11,5 @@ class blazeFist(Player):
         Param platforms_group: the platforms that check if the player is standing
         """
         super().__init__(x, y, platforms_group)
-        image = pygame.image.load(r"images\characters\blazefist\centerView.PNG").convert_alpha()
-        self.image = pygame.transform.scale(image, (int(image.get_width() * 0.5), int(image.get_height() * 0.5)))
+        self.imageLib = [r"images\characters\blazefist\leftView.PNG", r"images\characters\blazefist\frontView.PNG", r"images\characters\blazefist\rightView.PNG"]
         self.jump_speed = 200

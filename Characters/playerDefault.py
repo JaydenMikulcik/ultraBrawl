@@ -75,7 +75,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((30, 90))
         self.image.fill((255, 0, 0))  # Red color
         self.rect = self.image.get_rect()
-        self.imageLib = [r"images\characters\bloodMoon\sideView.PNG", r"images\characters\bloodMoon\frontView.PNG", r"images\characters\bloodMoon\sideView.PNG"]
+        self.imageLib = [r"images\characters\bloodMoon\leftView.PNG", r"images\characters\bloodMoon\frontView.PNG", r"images\characters\bloodMoon\rightView.PNG"]
         self.rect.x = x
         self.rect.y = y
         self.speed = 8

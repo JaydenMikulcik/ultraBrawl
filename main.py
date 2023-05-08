@@ -9,7 +9,7 @@ from instantiatePlayer import createPlayer
 from Characters.playerDefault import Player
 from Characters.blazeFist import blazeFist
 
-
+from LeaderBoard.leaderboard import leaderboard
 
 
 # pygame setup
@@ -97,7 +97,7 @@ while running:
                     continue
         else:
              # TODO make this open the leaderboard
-             continue
+            leaderboard(screen)
     
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():

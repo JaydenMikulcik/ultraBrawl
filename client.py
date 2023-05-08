@@ -79,16 +79,17 @@ class Client:
                 # Recieve the Character Object
                 my_custom_obj = pickle.loads(data)
                 print('Keys Recieved')
+                print(my_custom_obj)
                 return my_custom_obj
                 
             else:
-                print('No Keys Recieved')
+                print("No Data Recieved")
                 return None
         except Exception as e:
             print(f'Error receiving data: {e}')
             return None
 
-    def send_data(self, playerObj):
+    def send_data(self, playerKeys, character, username, playerHit, newPosition):
         """
         Method to send data to the server and the 
         other player
@@ -97,7 +98,14 @@ class Client:
         try:
 
             # serialize the custom object using pickle
-            data = pickle.dumps(playerObj)
+            pickleJson = {
+                "chosenCharacter": character,
+                "playerUsername": username,
+                "playerHit": playerHit,
+                "playerNewPosition": newPosition,
+                "playerKeys": playerKeys
+            }
+            data = pickle.dumps(pickleJson)
             self.client_socket.sendall(data)
         except Exception as e:
             print(f'Error sending data: {e}')

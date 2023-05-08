@@ -1,14 +1,20 @@
 import pygame
 
 from Characters.characterSelect import characterSelectScreen
+from OtherObjects.usernameBoxes import UsernameBox
 
 
 
 
-def mainMenu(screen):
+def mainMenu(screen, username):
     menu_options = ["Play Locally", "Play Online", "Check Leaderboard"]
     font = pygame.font.SysFont(None, 50)
     screen_size = (1200, 720)
+    
+    # Create the input field for the username
+    input_field = UsernameBox(screen, font, 800, 100, 400, 40, username)
+    usernameTextPos = (800, 50)
+    usernameText = font.render("Enter Your Username!!!", True, (0, 255, 255))
     # Create the select screen loop
     selected_option = 0
 
@@ -16,6 +22,10 @@ def mainMenu(screen):
     while menu_loop:
         # Fill the screen with black
         screen.fill((0, 0, 0))
+        screen.blit(usernameText, usernameTextPos)
+        
+        # Draw the username box
+        input_field.draw()
 
         # Loop through the menu options
         for i in range(len(menu_options)):
@@ -38,6 +48,7 @@ def mainMenu(screen):
 
         # Handle Pygame events
         for event in pygame.event.get():
+            input_field.handle_event(event)
             if event.type == pygame.QUIT:
                 # Quit the game if the user closes the window
                 menu_loop = False
@@ -56,15 +67,18 @@ def mainMenu(screen):
                     # Start the game or open the options screen
                     if selected_option == 0:
                         # Start the game
+                        game_option = "solo"
                         menu_loop = False
                         chosen_character = characterSelectScreen(screen, singlePlayer=True)
-                        return "solo", None, None, chosen_character
+                        if not chosen_character:
+                            game_option = False
+                        return game_option, None, None, chosen_character, input_field.get_text()
                     elif selected_option == 1:
                         # Open the options screen
                         serverType, client = characterSelectScreen(screen)
                         # TODO make this chosen characther work aswell
-                        return "multiplayer", serverType, client, None
+                        return "multiplayer", serverType, client, None, input_field.get_text()
                     elif selected_option == 2:
                         # Quit the game
                         menu_loop = False
-                        return "leaderboard", None, None, None
+                        return "leaderboard", None, None, None, input_field.get_text()

@@ -133,7 +133,7 @@ def options(screen):
         pygame.draw.rect(screen, button_color, button1_rect)
         pygame.draw.rect(screen, button_color, button2_rect)
         button1_text = font.render("Host Game", True, text_color)
-        button2_text = font.render("Create Game", True, text_color)
+        button2_text = font.render("Join Game", True, text_color)
         screen.blit(button1_text, (button_x1 + button_width/2 - button1_text.get_width()/2, 600))
         screen.blit(button2_text, (button_x2 + button_width/2 - button2_text.get_width()/2, 600))
         pygame.display.update()

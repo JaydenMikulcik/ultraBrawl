@@ -83,6 +83,7 @@ class Player(pygame.sprite.Sprite):
         self.doublejump = True
         self.gravity = 3
         self.on_ground = False
+        self.shoot_left = False
         self.platforms = platforms_group
         
         # Prevent from clicking button and multiple happen at same time
@@ -140,11 +141,11 @@ class Player(pygame.sprite.Sprite):
             self.outgoingAttacks.remove(self.outgoingAttacks.sprites()[0])
             return
         
-        if keys[pygame.K_RIGHT]:
+        if not self.shoot_left:
             direction = "right"
-        elif keys[pygame.K_LEFT]:
+        else:
             direction = "left"
-        elif keys[pygame.K_UP]:
+        if keys[pygame.K_UP]:
             direction = "up"
         elif keys[pygame.K_DOWN]:
             direction = "down"
@@ -205,9 +206,11 @@ class Player(pygame.sprite.Sprite):
 
         # Logic to control the characters
         if keys[pygame.K_LEFT]:
+            self.shoot_left = True
             self.rect.x -= self.speed
             image = pygame.image.load(self.imageLib[0]).convert_alpha()
         if keys[pygame.K_RIGHT]:
+            self.shoot_left = False
             self.rect.x += self.speed
             image = pygame.image.load(self.imageLib[2]).convert_alpha()
 

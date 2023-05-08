@@ -54,9 +54,13 @@ def characterSelectScreen(screen, singlePlayer=False):
     # Game loop
     running = True
     while running:
+        keys = pygame.key.get_pressed()
         pygame.display.update()
         # Handle events
         for event in pygame.event.get():
+            if keys[pygame.K_ESCAPE]:
+                return False
+            
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:

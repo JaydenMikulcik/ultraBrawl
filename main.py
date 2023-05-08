@@ -14,8 +14,10 @@ from LeaderBoard.leaderboard import leaderboard
 
 # pygame setup
 pygame.init()
+username = ""
 
 # Creating the background image and initializing the game
+font = pygame.font.SysFont(None, 30)
 screen = pygame.display.set_mode((1280, 720))
 background_image = pygame.image.load(r'images/backDrop.png').convert()
 clock = pygame.time.Clock()
@@ -46,9 +48,6 @@ allPlayers.add(player1)
 allPlayers.add(player2)
 
 
-# Init All the text
-font = pygame.font.SysFont(None, 30)
-
 player1LivesPos = (90, 100)
 player2LivesPos = (1000, 100)
 
@@ -64,6 +63,8 @@ showMenu = True
 onlinePlayer1 = None
 onlinePlayer2 = None
 
+# Check if the online player needs to be initialized
+initializePlayer = False
 
 while running:
 
@@ -76,9 +77,12 @@ while running:
     
     # Toggle Showing the Menu
     if showMenu:
-        menuChoice, serverType, onlineClient, character = mainMenu(screen)
+        menuChoice, serverType, onlineClient, character, username = mainMenu(screen, username)
         showMenu = False
-        if menuChoice == "solo":
+        print("Current Player: " + username)
+        if not menuChoice:
+            showMenu = True
+        elif menuChoice == "solo":
             # Goes through here if playing against the bot online
             onlinePlayer1 = None
             onlinePlayer2 = None
@@ -87,6 +91,7 @@ while running:
             continue
         elif menuChoice == "multiplayer":
              # Goes here if the person playing choses to play online
+             initializePlayer = True
              if serverType == "create":
                     # The Connected player 2
                     onlinePlayer2 = onlineClient
@@ -98,6 +103,7 @@ while running:
         else:
              # TODO make this open the leaderboard
             leaderboard(screen)
+            showMenu = True
     
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
@@ -106,17 +112,22 @@ while running:
 
     # Checks if player 2 is a online player or not
     if onlinePlayer2 != None:
-        onlinePlayer2.send_data(keys)
-        player2Keys = onlinePlayer2.receive_data()
-        if player2Keys:
-            player2.update(player2Keys, screen)
+        onlinePlayer2.send_data(keys, character, username, False, (20, 20))
+        player2Data = onlinePlayer2.receive_data()
+        if player2Data:
+            
+            # Checks if a new player instance needs to be created
+            if initializePlayer:
+                print("Initialize the player choice")
+                initializePlayer = False
+            player2.update(player2Data["playerKeys"], screen)
         player1.update(keys, screen)
     
     elif onlinePlayer1 != None:
-        onlinePlayer1.send_data(keys)
-        player1Keys = onlinePlayer1.receive_data()
-        if player1Keys:
-            player1.update(player1Keys, screen)
+        onlinePlayer1.send_data(keys, character, username, False, (20, 20))
+        player1Data = onlinePlayer1.receive_data()
+        if player1Data:
+            player1.update(player1Data["playerKeys"], screen)
         player2.update(keys, screen)
     
     else:

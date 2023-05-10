@@ -1,9 +1,12 @@
 
 import pygame
 import asyncio
+import pygbag
+import requests
 
 from mainMenu import mainMenu
 from OtherObjects.platforms import Platform
+from OtherObjects.gameOver import showGameOver
 from instantiatePlayer import createPlayer
 
 
@@ -26,8 +29,6 @@ async def run():
     clock = pygame.time.Clock()
     running = True
     dt = 0
-
-
 
 
     # Initialize the platforms TODO in the future make a map pool
@@ -90,6 +91,7 @@ async def run():
                 onlinePlayer1 = None
                 onlinePlayer2 = None
                 player1 = createPlayer(character, screen.get_width() / 2 - 378, screen.get_height() / 2, objects)
+                player1.userName = username
                 allPlayers.add(player1)
                 continue
             elif menuChoice == "multiplayer":
@@ -98,13 +100,17 @@ async def run():
                 if serverType == "create":
                     # The Connected player 2
                     onlinePlayer2 = onlineClient
+                    player1 = createPlayer(character, screen.get_width() / 2 - 378, screen.get_height() / 2, objects)
+                    player1.userName = username
                     continue
                 else:
                     # The connected player 1
                     onlinePlayer1 = onlineClient
+                    player2 = createPlayer(character, screen.get_width() / 2 + 378, screen.get_height() / 2, objects)
+                    player2.userName = username
                     continue
             else:
-                # TODO make this open the leaderboard
+                # Shows the leaderboard
                 leaderboard(screen)
                 showMenu = True
     
@@ -117,11 +123,13 @@ async def run():
         if onlinePlayer2 != None:
             onlinePlayer2.send_data(keys, character, username, False, (20, 20))
             player2Data = onlinePlayer2.receive_data()
-            if player2Data:
             
+            if player2Data:
                 # Checks if a new player instance needs to be created
                 if initializePlayer:
-                    print("Initialize the player choice")
+                    print("Initialize Second Character")
+                    player2 = createPlayer(player2Data["chosenCharacter"], screen.get_width() / 2 + 378, screen.get_height() / 2, objects)
+                    player2.userName = player2Data["playerUsername"]
                     initializePlayer = False
                 player2.update(player2Data["playerKeys"], screen)
             player1.update(keys, screen)
@@ -129,7 +137,14 @@ async def run():
         elif onlinePlayer1 != None:
             onlinePlayer1.send_data(keys, character, username, False, (20, 20))
             player1Data = onlinePlayer1.receive_data()
+            
             if player1Data:
+                # Checks if a new player instance needs to be created
+                if initializePlayer:
+                    print("Initialize First Player")
+                    player1 = createPlayer(player1Data["chosenCharacter"], screen.get_width() / 2 - 400, screen.get_height() / 2, objects)
+                    player1.userName = player1Data["playerUsername"]
+                    initializePlayer = False
                 player1.update(player1Data["playerKeys"], screen)
             player2.update(keys, screen)
     
@@ -138,6 +153,25 @@ async def run():
             # TODO: Add the bot that you play against locally
             player1.update(keys, screen)
             player2.play_bot(player1.rect.x, screen)
+            
+        # Logic for game over
+        if player1.lives == 0 or player2.lives == 0:
+            winner = None
+            playAgain = showGameOver(screen, winner)
+            if player1.lives == 0:
+                winner = "Player 2"
+                if player2.userName:
+                    requests.post(r"https://7zo46xcxefurhkuktmn7sjrvlm0flydm.lambda-url.us-east-2.on.aws/", json={"username": player2.userName})
+            else:
+                winner = "Player 1"
+                if player1.userName:
+                    requests.post(r"https://7zo46xcxefurhkuktmn7sjrvlm0flydm.lambda-url.us-east-2.on.aws/", json={"username": player1.userName})
+            if playAgain:
+                player1.resetStats()
+                player2.resetStats()
+            else:
+                showMenu = True
+            
 
 
         # Updating the players and screen and stuff

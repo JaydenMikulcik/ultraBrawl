@@ -68,8 +68,13 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # Setup for the game logic
+        self.userName = None
+        self.initx = x
+        self.inity = y
         self.lives = 3
         self.health = 0
+        self.isHit = False
+        self.newPosition = (x, y)
 
         # Setup for the player
         self.image = pygame.Surface((30, 90))
@@ -111,13 +116,21 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
 
+    def resetStats(self):
+        """
+        Init the stats when restarted
+        """
+        self.lives = 3
+        self.health = 0
+        self.rect.x = self.initx
+        self.rect.y = self.inity
+        
+    
     def got_hit(self):
         """
         Method to check if the player got hit and 
         flinging in random direction if hit
         """
-
-        print("One player got hit health is at: " + str(self.health))
         flatHitX = random.randint(-80, 80)
         flatHitY = random.randint(-80, 0)
 
@@ -128,7 +141,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += varHitY + flatHitY
         self.health += 1
         
-
+        self.isHit = True
+        self.newPosition = (self.rect.x, self.rect.y)
 
     def add_attack(self, keys):
         """
@@ -195,7 +209,9 @@ class Player(pygame.sprite.Sprite):
         Param keys: the incoming keys from main logic
         Param screen: the scree from the main logic
         """
-
+        self.isHit = False
+        
+            
         # Make the image based on the way the player walks
         image = pygame.image.load(self.imageLib[1]).convert_alpha()
 
@@ -257,7 +273,7 @@ class Player(pygame.sprite.Sprite):
 
         if self.rect.x < 690 and self.rect.x > 720:
             self.rect.x += self.speed
-        elif self.rect.x > 630:
+        elif self.rect.x < 630 and self.rect.x > 660:
             self.rect.x -= self.speed
 
         # Apply gravity
